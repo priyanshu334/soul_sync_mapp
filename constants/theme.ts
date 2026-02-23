@@ -1,53 +1,50 @@
-/**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
- */
+import { StyleSheet } from "react-native";
 
-import { Platform } from 'react-native';
+export const COLORS = {
+  background: "#000",
+  surface: "#0a0a0a",
+  white: "#ffffff",
+  gray: "#BFBFBF",
 
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
+  primaryStart: "#6A00F4",
+  primaryEnd: "#C77DFF",
 
-export const Colors = {
-  light: {
-    text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
-  },
-  dark: {
-    text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
-  },
+  // Added for Register Screen compatibility
+  overlay: "rgba(0,0,0,0.4)", 
+  inputBg: "rgba(255, 255, 255, 0.2)", // Light tint so text is visible on dark bg
+  textPrimary: "#ffffff",
+  textSecondary: "#BFBFBF",
 };
 
-export const Fonts = Platform.select({
-  ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
-    sans: 'system-ui',
-    /** iOS `UIFontDescriptorSystemDesignSerif` */
-    serif: 'ui-serif',
-    /** iOS `UIFontDescriptorSystemDesignRounded` */
-    rounded: 'ui-rounded',
-    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
-    mono: 'ui-monospace',
+export const SIZES = {
+  padding: 20,
+  radius: 30,
+  title: 28,
+  subtitle: 14,
+};
+
+export const GLOBAL = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.background,
   },
-  default: {
-    sans: 'normal',
-    serif: 'serif',
-    rounded: 'normal',
-    mono: 'monospace',
+  center: {
+    justifyContent: "center",
+    alignItems: "center",
   },
-  web: {
-    sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
-    serif: "Georgia, 'Times New Roman', serif",
-    rounded: "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
-    mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
+  title: {
+    fontSize: SIZES.title,
+    color: COLORS.white,
+    fontWeight: "600",
   },
+  subtitle: {
+    fontSize: SIZES.subtitle,
+    color: COLORS.gray,
+    textAlign: "center",
+    marginTop: 15,
+  },
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+  }
 });
