@@ -1,9 +1,26 @@
 import { AuthProvider, useAuth } from '@/providers/AuthProvider'
-import { Stack } from 'expo-router'
+import { Stack, useRouter, useSegments } from 'expo-router'
+import { useEffect } from 'react'
 import { ActivityIndicator, View } from 'react-native'
 
 function RootNavigator() {
   const { session, loading } = useAuth()
+  const segments = useSegments()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (loading) return
+
+    const inAuthGroup = segments[0] === '(auth)'
+
+    if (!session && !inAuthGroup) {
+      // Redirect to login if not authenticated and not in auth group
+      router.replace('/login')
+    } else if (session && inAuthGroup) {
+      // Redirect to tabs if authenticated and in auth group
+      router.replace('/(tabs)')
+    }
+  }, [session, loading, segments])
 
   if (loading) {
     return (
@@ -23,6 +40,7 @@ function RootNavigator() {
     </Stack>
   )
 }
+
 
 export default function Layout() {
   return (
