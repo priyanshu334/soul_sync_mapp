@@ -1,64 +1,73 @@
-import { Tabs } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
-import { StyleSheet, Platform } from 'react-native';
-import { COLORS } from '@/constants/theme';
+import { Tabs } from "expo-router"
 
 export default function TabsLayout() {
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: COLORS.primaryEnd,
-        tabBarInactiveTintColor: COLORS.gray,
-        tabBarStyle: styles.tabBar,
+        tabBarActiveTintColor: "#7C3AED", // Astrology purple
+        tabBarInactiveTintColor: "#94A3B8",
+        tabBarStyle: {
+          backgroundColor: "#0F172A",
+          borderTopWidth: 0,
+          height: 65,
+          paddingBottom: 8,
+          paddingTop: 6,
+        },
+        tabBarLabelStyle: {
+          fontSize: 12,
+        },
       }}
     >
-      {/* 1. VISIBLE TAB: Home */}
-      <Tabs.Screen
+      {/* <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <Ionicons name="home" size={22} color={color} />,
+          title: "Home",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="home" size={size} color={color} />
+          ),
         }}
-      />
+      /> */}
 
-      {/* 2. VISIBLE TAB: Settings */}
-      <Tabs.Screen
-        name="settings"
+      {/* <Tabs.Screen
+        name="explore"
         options={{
-          title: 'Settings',
-          tabBarIcon: ({ color }) => <Ionicons name="settings" size={22} color={color} />,
+          title: "Explore",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="planet" size={size} color={color} />
+          ),
+        }}
+      /> */}
+
+      {/* <Tabs.Screen
+        name="community"
+        options={{
+          title: "Community",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="people" size={size} color={color} />
+          ),
         }}
       />
 
-      {/* 3. HIDDEN PAGES: These exist but won't show icons */}
       <Tabs.Screen
-        name="profile-edit" 
-        options={{ href: null }} // Hides it from the bar
-      />
-      
-      <Tabs.Screen
-        name="notifications" 
-        options={{ href: null }} // Hides it from the bar
+        name="profile/index"
+        options={{
+          title: "Profile",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="person" size={size} color={color} />
+          ),
+        }}
       />
 
       <Tabs.Screen
-        name="security" 
-        options={{ href: null }} // Hides it from the bar
-      />
+        name="settings/index"
+        options={{
+          title: "Settings",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="settings" size={size} color={color} />
+          ),
+        }}
+      /> */}
     </Tabs>
-  );
+  )
 }
-
-const styles = StyleSheet.create({
-  tabBar: {
-    position: 'absolute',
-    bottom: Platform.OS === 'ios' ? 30 : 20,
-    left: 40,
-    right: 40,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: '#121212',
-    borderTopWidth: 0,
-  },
-});

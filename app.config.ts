@@ -6,7 +6,7 @@ const config: ExpoConfig = {
   slug: 'app',
   version: '1.0.0',
   orientation: 'portrait',
-  icon: './assets/images/icon.png',
+  icon: './assets/images/s1.jpeg',
   scheme: 'app',
   userInterfaceStyle: 'automatic',
   newArchEnabled: true,
@@ -18,9 +18,7 @@ const config: ExpoConfig = {
   android: {
     adaptiveIcon: {
       backgroundColor: '#E6F4FE',
-      foregroundImage: './assets/images/android-icon-foreground.png',
-      backgroundImage: './assets/images/android-icon-background.png',
-      monochromeImage: './assets/images/android-icon-monochrome.png',
+
     },
     edgeToEdgeEnabled: true,
     predictiveBackGestureEnabled: false,
@@ -36,7 +34,7 @@ const config: ExpoConfig = {
     [
       'expo-splash-screen',
       {
-        image: './assets/images/splash-icon.png',
+        image: './assets/images/s1.jpeg',
         imageWidth: 200,
         resizeMode: 'contain',
         backgroundColor: '#ffffff',

@@ -2,15 +2,15 @@ import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useState } from "react";
 import {
-    Dimensions,
-    FlatList,
-    Image,
-    Modal,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Dimensions,
+  FlatList,
+  Image,
+  Modal,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import Svg, { Line } from "react-native-svg";
 
@@ -39,7 +39,7 @@ export default function ProfileScreen() {
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      
+
       {/* HEADER SECTION */}
       <View style={styles.header}>
         <View style={styles.headerInfo}>
@@ -49,7 +49,7 @@ export default function ProfileScreen() {
               <Text style={styles.jobText}>UI/UX Designer</Text>
             </LinearGradient>
           </View>
-          
+
           <View style={styles.tagRow}>
             {['Photography', 'Travel', 'Art'].map(tag => (
               <View key={tag} style={styles.tag}><Text style={styles.tagText}>{tag}</Text></View>
@@ -61,10 +61,10 @@ export default function ProfileScreen() {
           </Text>
           <Text style={styles.socialHandle}>@priya.sharma.designer</Text>
         </View>
-        
-        <Image 
-          source={{ uri: "https://images.unsplash.com/photo-1546961329-78bef0414d7c?q=80&w=400" }} 
-          style={styles.profileImage} 
+
+        <Image
+          source={{ uri: "https://images.unsplash.com/photo-1546961329-78bef0414d7c?q=80&w=400" }}
+          style={styles.profileImage}
         />
       </View>
 
@@ -94,21 +94,21 @@ export default function ProfileScreen() {
 
           {activeTab === 'basic' ? (
             <View style={styles.tabContent}>
-               <View style={styles.grid}>
-                  <DetailItem label="Birth Date" val="March 15, 1999" />
-                  <DetailItem label="Birth Time" val="05:30 AM" />
-                  <DetailItem label="Birth Place" val="Mumbai, MH" />
-                  <DetailItem label="Zodiac" val="♓ Pisces" />
-               </View>
+              <View style={styles.grid}>
+                <DetailItem label="Birth Date" val="March 15, 1999" />
+                <DetailItem label="Birth Time" val="05:30 AM" />
+                <DetailItem label="Birth Place" val="Mumbai, MH" />
+                <DetailItem label="Zodiac" val="♓ Pisces" />
+              </View>
             </View>
           ) : (
             <View style={styles.chartContainer}>
-               <Svg height="200" width="200" viewBox="0 0 100 100" style={styles.svg}>
-                  <Line x1="0" y1="0" x2="100" y2="100" stroke="#444" strokeWidth="0.5" />
-                  <Line x1="100" y1="0" x2="0" y2="100" stroke="#444" strokeWidth="0.5" />
-                  <Line x1="50" y1="0" x2="50" y2="100" stroke="#444" strokeWidth="0.5" />
-                  <Line x1="0" y1="50" x2="100" y2="50" stroke="#444" strokeWidth="0.5" />
-               </Svg>
+              <Svg height="200" width="200" viewBox="0 0 100 100" style={styles.svg}>
+                <Line x1="0" y1="0" x2="100" y2="100" stroke="#444" strokeWidth="0.5" />
+                <Line x1="100" y1="0" x2="0" y2="100" stroke="#444" strokeWidth="0.5" />
+                <Line x1="50" y1="0" x2="50" y2="100" stroke="#444" strokeWidth="0.5" />
+                <Line x1="0" y1="50" x2="100" y2="50" stroke="#444" strokeWidth="0.5" />
+              </Svg>
             </View>
           )}
         </View>
