@@ -3,12 +3,12 @@ import { Feather, Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React from "react";
 import {
-    Image,
-    Platform,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View
+  Image,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
 } from "react-native";
 
 export function ProfileHeader() {
@@ -23,9 +23,9 @@ export function ProfileHeader() {
           <TouchableOpacity style={styles.iconButton}>
             <Feather name="share-2" size={20} color={COLORS.white} />
           </TouchableOpacity>
-          <TouchableOpacity 
-            style={styles.iconButton} 
-            onPress={() => router.push("/(tabs)/settings/AboutUs")}
+          <TouchableOpacity
+            style={styles.iconButton}
+            onPress={() => router.push("/(tabs)/settings/privacy")}
           >
             <Ionicons name="settings-outline" size={22} color={COLORS.white} />
           </TouchableOpacity>
@@ -35,9 +35,9 @@ export function ProfileHeader() {
       {/* Profile Info Section */}
       <View style={styles.profileSection}>
         <View style={styles.avatarWrapper}>
-          <Image 
-            source={{ uri: userImage }} 
-            style={styles.avatar} 
+          <Image
+            source={{ uri: userImage }}
+            style={styles.avatar}
           />
           {/* Online/Verified Badge (Optional extra for 2026 feel) */}
           <View style={styles.verifiedBadge}>

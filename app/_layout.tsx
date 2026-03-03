@@ -20,7 +20,7 @@ function RootNavigator() {
       router.replace('/(auth)');
     } else if (session && inAuthGroup) {
       // If they ARE logged in but trying to see login screens, send to tabs
-      router.replace('/(onboarding)/username');
+      router.replace('/(tabs)');
     }
   }, [session, loading, segments]);
 
@@ -36,7 +36,6 @@ function RootNavigator() {
     <Stack screenOptions={{ headerShown: false }}>
       {/* These names MUST match the folder names in your file tree */}
       <Stack.Screen name="(auth)" />
-      <Stack.Screen name="(onboarding)/username" />
       <Stack.Screen name="(tabs)" />
     </Stack>
   );

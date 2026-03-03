@@ -13,7 +13,7 @@ export default function Review() {
             </Text>
 
             <TouchableOpacity
-                onPress={() => router.replace("/(tabs)")}
+                onPress={() => router.replace("/(tabs)/profile")}
                 style={{
                     backgroundColor: "#7C3AED",
                     padding: 16,

@@ -6,6 +6,7 @@ export default function OnBoardingLayout() {
             <Stack.Screen name="username" />
             <Stack.Screen name="birth-details" />
             <Stack.Screen name="prefrenses" />
+            <Stack.Screen name="photos" />
             <Stack.Screen name="bio" />
             <Stack.Screen name="review" />
         </Stack>
