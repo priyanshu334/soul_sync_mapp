@@ -1,3 +1,4 @@
+import { supabase } from "@/src/lib/supabase";
 import { Ionicons } from "@expo/vector-icons";
 import { Href, router } from "expo-router";
 import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -29,10 +30,23 @@ const settingsGroups = [
 ];
 
 export default function SettingsScreen() {
+    const handleLogout = () => {
+        supabase.auth.signOut();
+        router.replace("/(auth)");
+    }
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollContent}>
-                <Text style={styles.headerTitle}>Settings</Text>
+                <View style={styles.headerContainer}>
+                    <Text style={styles.headerTitle}>Settings</Text>
+                    <TouchableOpacity
+                        activeOpacity={0.7}
+                        onPress={handleLogout}
+                        style={styles.logoutButton}
+                    >
+                        <Text style={styles.logoutText}>Logout</Text>
+                    </TouchableOpacity>
+                </View>
 
                 {settingsGroups.map((group, groupIndex) => (
                     <View key={groupIndex} style={styles.groupContainer}>
@@ -87,6 +101,13 @@ const styles = StyleSheet.create({
     groupContainer: {
         marginBottom: 28,
     },
+    headerContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        paddingHorizontal: 20,
+        paddingTop: 20,
+    },
     groupLabel: {
         color: "#64748B",
         fontSize: 13,
@@ -114,6 +135,16 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         marginRight: 14,
+    },
+    logoutButton: {
+        backgroundColor: "#EF4444",
+        padding: 12,
+        borderRadius: 8,
+    },
+    logoutText: {
+        color: "white",
+        fontSize: 16,
+        fontWeight: "600",
     },
     itemText: {
         color: "white",

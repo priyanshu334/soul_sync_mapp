@@ -2,112 +2,153 @@ import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import {
   ImageBackground,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import { COLORS, GLOBAL } from "../../constants/theme";
+import { COLORS } from "../../constants/theme";
 
 export default function screen_one() {
   return (
-    <View style={[GLOBAL.container, styles.wrapper]}>
+    <View style={styles.outerContainer}>
+      <StatusBar barStyle="light-content" />
+
       <ImageBackground
         source={require("../../assets/images/s1.jpeg")}
-        style={styles.card}
-        imageStyle={styles.cardImage}
+        style={styles.backgroundImage}
+        imageStyle={styles.imageStyle}
       >
-        {/* Heading */}
-        <Text style={GLOBAL.title}>
-          the stars are aligned{"\n"}
-          your story begins now{"\n"}
-          Ready to{"\n"}
-          connect?
-        </Text>
+        {/* The Magic Sauce: A gradient that fades from transparent to deep black */}
+        <LinearGradient
+          colors={["transparent", "rgba(0,0,0,0.4)", "rgba(0,0,0,0.9)"]}
+          style={styles.gradientOverlay}
+        >
+          <View style={styles.contentContainer}>
+            {/* Heading - Increased letter spacing and line height */}
+            <Text style={styles.mainTitle}>
+              the stars are aligned{"\n"}
+              your story begins{"\n"}
+              <Text style={styles.highlightText}>Ready to connect?</Text>
+            </Text>
 
-        {/* Subtitle */}
-        <Text style={GLOBAL.subtitle}>
-          No matter what you’re seeking—companionship, chemistry, or
-          destiny—Lovitche guides you there.
-        </Text>
+            {/* Subtitle - Softer color for better hierarchy */}
+            <Text style={styles.description}>
+              No matter what you’re seeking—companionship, chemistry, or
+              destiny—<Text style={{ fontWeight: '700' }}>Lovitche</Text> guides you there.
+            </Text>
 
-        {/* Buttons */}
-        <View style={styles.row}>
-          <TouchableOpacity style={styles.loginBtn} onPress={()=>router.push("/login")}>
-            <LinearGradient
-              colors={[COLORS.primaryStart, COLORS.primaryEnd]}
-              style={styles.btnGradient}
-            >
-              <Text style={styles.loginText}>Login</Text>
-            </LinearGradient>
-          </TouchableOpacity>
+            {/* Buttons Row */}
+            <View style={styles.buttonRow}>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                style={styles.primaryButton}
+                onPress={() => router.push("/login")}
+              >
+                <LinearGradient
+                  colors={[COLORS.primaryStart || "#9333ea", COLORS.primaryEnd || "#db2777"]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 0 }}
+                  style={styles.gradientBtn}
+                >
+                  <Text style={styles.loginText}>Login</Text>
+                </LinearGradient>
+              </TouchableOpacity>
 
-          <TouchableOpacity style={styles.signupBtn} onPress={()=>router.push("/register")}>
-            <Text style={styles.signupText}>Signup</Text>
-          </TouchableOpacity>
-        </View>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                style={styles.secondaryButton}
+                onPress={() => router.push("/register")}
+              >
+                <Text style={styles.signupText}>Signup</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </LinearGradient>
       </ImageBackground>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  wrapper: {
+  outerContainer: {
+    flex: 1,
+    backgroundColor: "#000",
+  },
+  backgroundImage: {
+    flex: 1,
+    width: "100%",
+    height: "100%",
+  },
+  imageStyle: {
+    resizeMode: "cover", // Cover looks more professional than stretch
+  },
+  gradientOverlay: {
+    flex: 1,
+    justifyContent: "flex-end",
+    paddingHorizontal: 30,
+    paddingBottom: 60,
+  },
+  contentContainer: {
+    width: "100%",
+  },
+  mainTitle: {
+    fontSize: 32,
+    fontWeight: "800",
+    color: "#fff",
+    lineHeight: 40,
+    letterSpacing: -0.5,
+    marginBottom: 16,
+  },
+  highlightText: {
+    color: "#db2777", // Or your primary brand color
+  },
+  description: {
+    fontSize: 16,
+    color: "rgba(255,255,255,0.7)",
+    lineHeight: 24,
+    marginBottom: 40,
+  },
+  buttonRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+  },
+  primaryButton: {
+    flex: 2, // Login button is slightly wider for emphasis
+    height: 58,
+    borderRadius: 18,
+    overflow: "hidden",
+    elevation: 8,
+    shadowColor: "#db2777",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+  },
+  gradientBtn: {
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
-
-  card: {
-    width: "88%",
-    height: "82%",
-    borderRadius: 40,
-    padding: 25,
-    justifyContent: "flex-end",
-    backgroundColor: COLORS.surface,
-    overflow: "hidden",
-  },
-
-  cardImage: {
-    borderRadius: 40,
-    resizeMode: "stretch",
-    opacity: 1,
-  },
-
-  
-
-  row: {
-    flexDirection: "row",
-    marginTop: 30,
-    gap: 10,
-  },
-
-  loginBtn: {
+  secondaryButton: {
     flex: 1,
-    borderRadius: 30,
-    overflow: "hidden",
-  },
-
-  btnGradient: {
-    paddingVertical: 15,
+    height: 58,
+    borderRadius: 18,
+    justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "rgba(255,255,255,0.15)", // Translucent "Glass" look
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.2)",
   },
-
-  signupBtn: {
-    flex: 1,
-    paddingVertical: 15,
-    borderRadius: 30,
-    alignItems: "center",
-    backgroundColor: "#eee",
-  },
-
   loginText: {
     color: "#fff",
-    fontSize: 16,
-    fontWeight: "600",
+    fontSize: 18,
+    fontWeight: "700",
   },
-
   signupText: {
-    fontSize: 16,
+    color: "#fff",
+    fontSize: 18,
     fontWeight: "600",
   },
 });

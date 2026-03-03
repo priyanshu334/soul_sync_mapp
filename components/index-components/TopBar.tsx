@@ -22,7 +22,7 @@ export default function TopBar() {
                     <Ionicons name="notifications-outline" size={24} color="white" />
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => router.push("/(tabs)/community")}>
+                <TouchableOpacity onPress={() => router.push("/(tabs)/chat")}>
                     <Ionicons name="chatbubble-outline" size={24} color="white" />
                 </TouchableOpacity>
             </View>
