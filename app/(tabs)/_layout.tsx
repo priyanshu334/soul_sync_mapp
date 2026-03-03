@@ -1,3 +1,4 @@
+import { Ionicons } from "@expo/vector-icons"
 import { Tabs } from "expo-router"
 
 export default function TabsLayout() {
@@ -19,7 +20,7 @@ export default function TabsLayout() {
         },
       }}
     >
-      {/* <Tabs.Screen
+      <Tabs.Screen
         name="index"
         options={{
           title: "Home",
@@ -27,9 +28,9 @@ export default function TabsLayout() {
             <Ionicons name="home" size={size} color={color} />
           ),
         }}
-      /> */}
+      />
 
-      {/* <Tabs.Screen
+      <Tabs.Screen
         name="explore"
         options={{
           title: "Explore",
@@ -37,9 +38,9 @@ export default function TabsLayout() {
             <Ionicons name="planet" size={size} color={color} />
           ),
         }}
-      /> */}
+      />
 
-      {/* <Tabs.Screen
+      <Tabs.Screen
         name="community"
         options={{
           title: "Community",
@@ -50,7 +51,7 @@ export default function TabsLayout() {
       />
 
       <Tabs.Screen
-        name="profile/index"
+        name="profile"
         options={{
           title: "Profile",
           tabBarIcon: ({ color, size }) => (
@@ -60,14 +61,14 @@ export default function TabsLayout() {
       />
 
       <Tabs.Screen
-        name="settings/index"
+        name="settings"
         options={{
           title: "Settings",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="settings" size={size} color={color} />
           ),
         }}
-      /> */}
+      />
     </Tabs>
   )
 }
