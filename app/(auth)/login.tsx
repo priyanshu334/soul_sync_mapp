@@ -15,20 +15,21 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async () => {
     if (!email || !password) {
       Alert.alert("Missing Info", "Please enter both email and password.");
       return;
     }
-    
+
     setLoading(true);
     const { error } = await login(email, password);
     setLoading(false);
@@ -49,7 +50,7 @@ export default function Login() {
       <StatusBar barStyle="light-content" />
       <View style={styles.overlay} />
 
-      <KeyboardAvoidingView 
+      <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{ flex: 1 }}
       >
@@ -82,22 +83,36 @@ export default function Login() {
 
           {/* Password */}
           <View style={styles.inputBox}>
-            <Ionicons name="lock-closed-outline" size={18} color={COLORS.gray} />
+            <Ionicons
+              name="lock-closed-outline"
+              size={18}
+              color={COLORS.gray}
+            />
             <TextInput
               placeholder="Password"
               placeholderTextColor="#777"
-              secureTextEntry
+              secureTextEntry={!showPassword}
               style={styles.input}
               value={password}
               onChangeText={setPassword}
               autoCapitalize="none"
               editable={!loading}
             />
+            <TouchableOpacity
+              onPress={() => setShowPassword(!showPassword)}
+              style={styles.passwordToggle}
+            >
+              <Ionicons
+                name={showPassword ? "eye-outline" : "eye-off-outline"}
+                size={18}
+                color={COLORS.gray}
+              />
+            </TouchableOpacity>
           </View>
 
           {/* Login Button */}
-          <TouchableOpacity 
-            style={styles.buttonWrapper} 
+          <TouchableOpacity
+            style={styles.buttonWrapper}
             onPress={handleLogin}
             disabled={loading}
           >
@@ -173,6 +188,9 @@ const styles = StyleSheet.create({
     color: COLORS.white, // White text for dark theme
     fontSize: 16,
   },
+  passwordToggle: {
+    padding: 8,
+  },
   buttonWrapper: {
     width: "100%",
     marginTop: 10,
@@ -193,5 +211,5 @@ const styles = StyleSheet.create({
     marginTop: 20,
     textAlign: "center",
     fontSize: 14,
-  }
+  },
 });
