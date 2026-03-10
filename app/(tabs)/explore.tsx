@@ -8,121 +8,107 @@ import {
     TouchableOpacity,
     View
 } from 'react-native';
+import { useFonts, Forum_400Regular } from '@expo-google-fonts/forum';
+import { Nunito_300Light } from '@expo-google-fonts/nunito';
 
-const { width } = Dimensions.get('window');
-const CARD_BORDER_RADIUS = 24;
+const { width, height } = Dimensions.get('window');
+const GAP = 10;
+const H_PAD = 15;
+const CARD_WIDTH = (width - H_PAD * 2 - GAP) / 2;
+const CARD_HEIGHT = (height * 0.9 - 80) / 2; // 4 cards visible at once (2 rows of 2)
 
 interface Card {
     id: string;
     title: string;
-    subtitle: string;
-    height: number;
+    subheading: string;
     imageUri?: string;
 }
 
 const CARDS: Card[] = [
-    {
-        id: '1',
-        title: 'people with\nsame interests',
-        subtitle: 'Find your community',
-        height: 180,
-    },
-    {
-        id: '2',
-        title: 'make friends',
-        subtitle: 'Connect with new people',
-        height: 240,
-    },
-    {
-        id: '3',
-        title: 'people near\nyou',
-        subtitle: 'Discover locals',
-        height: 180,
-    },
-    {
-        id: '4',
-        title: 'paly date',
-        subtitle: 'Schedule meetups',
-        height: 240,
-    },
-    {
-        id: '5',
-        title: 'explore more',
-        subtitle: 'See what\'s new',
-        height: 180,
-    },
+    { id: '1', title: 'people with same intrests', subheading: 'find your tribe' },
+    { id: '2', title: 'make friends',               subheading: 'connect now'    },
+    { id: '3', title: 'people near you',             subheading: 'discover locals'},
+    { id: '4', title: 'play date',                   subheading: 'schedule fun'  },
+    { id: '5', title: 'events',                      subheading: 'what\'s on'    },
+    { id: '6', title: 'night out',                   subheading: 'plan the night'},
+    { id: '7', title: 'new in town',                 subheading: 'explore around'},
 ];
+
+interface CardItemProps {
+    card: Card;
+    selected: boolean;
+    onPress: () => void;
+}
+
+const CardItem: React.FC<CardItemProps> = ({ card, selected, onPress }) => (
+    <TouchableOpacity
+        activeOpacity={0.85}
+        onPress={onPress}
+        style={[styles.cardWrapper, selected && styles.cardSelected]}
+    >
+        <LinearGradient
+            colors={['#1e2340', '#0d1020']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={StyleSheet.absoluteFillObject}
+        />
+        {/* Subtle top shimmer */}
+        <LinearGradient
+            colors={['rgba(255,255,255,0.04)', 'transparent']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0, y: 0.4 }}
+            style={StyleSheet.absoluteFillObject}
+        />
+
+        <View style={styles.contentContainer}>
+            <Text style={styles.cardTitle}>{card.title}</Text>
+            <View style={styles.divider} />
+            <Text style={styles.metaText}>{card.subheading}</Text>
+        </View>
+    </TouchableOpacity>
+);
 
 const ExplorePage: React.FC = () => {
     const [selectedCard, setSelectedCard] = useState<string | null>(null);
+
+    const [fontsLoaded] = useFonts({
+        Forum_400Regular,
+        Nunito_300Light,
+    });
+
+    // Split cards into rows of 2
+    const rows: Card[][] = [];
+    for (let i = 0; i < CARDS.length; i += 2) {
+        rows.push(CARDS.slice(i, i + 2));
+    }
 
     return (
         <View style={styles.container}>
             {/* Header */}
             <View style={styles.header}>
                 <Text style={styles.headerTitle}>explore</Text>
-                <View style={styles.notificationBadge} />
+               
             </View>
 
-            {/* Main Content */}
             <ScrollView
                 style={styles.scrollView}
+                contentContainerStyle={styles.scrollContent}
                 showsVerticalScrollIndicator={false}
             >
-                <View style={styles.cardGrid}>
-                    {CARDS.map((card, index) => {
-                        const isFullWidth = index === 1 || index === 3;
-
-                        return (
-                            <TouchableOpacity
+                {rows.map((row, rowIndex) => (
+                    <View key={rowIndex} style={styles.row}>
+                        {row.map((card) => (
+                            <CardItem
                                 key={card.id}
-                                activeOpacity={0.8}
+                                card={card}
+                                selected={selectedCard === card.id}
                                 onPress={() => setSelectedCard(card.id)}
-                                style={[
-                                    styles.cardWrapper,
-                                    {
-                                        width: isFullWidth ? width - 30 : (width - 40) / 2,
-                                        marginRight: !isFullWidth && index % 2 === 0 ? 10 : 0,
-                                        marginBottom: 15,
-                                    },
-                                ]}
-                            >
-                                <View
-                                    style={[
-                                        styles.card,
-                                        {
-                                            height: card.height,
-                                            borderRadius: CARD_BORDER_RADIUS,
-                                            overflow: 'hidden',
-                                        },
-                                    ]}
-                                >
-                                    {/* Card Background with Image or Gradient */}
-                                    <LinearGradient
-                                        colors={['#3a4571', '#1a1f35']}
-                                        start={{ x: 0, y: 0 }}
-                                        end={{ x: 1, y: 1 }}
-                                        style={styles.cardBackground}
-                                    />
-
-                                    {/* Dark Gradient Overlay */}
-                                    <LinearGradient
-                                        colors={['transparent', 'rgba(10, 14, 39, 0.9)']}
-                                        start={{ x: 0, y: 0 }}
-                                        end={{ x: 0, y: 1 }}
-                                        style={styles.darkOverlay}
-                                    />
-
-                                    {/* Content */}
-                                    <View style={styles.contentContainer}>
-                                        <Text style={styles.cardTitle}>{card.title}</Text>
-                                        <Text style={styles.cardSubtitle}>{card.subtitle}</Text>
-                                    </View>
-                                </View>
-                            </TouchableOpacity>
-                        );
-                    })}
-                </View>
+                            />
+                        ))}
+                        {/* Fill empty slot if odd card at end */}
+                        {row.length === 1 && <View style={styles.cardWrapper} />}
+                    </View>
+                ))}
             </ScrollView>
         </View>
     );
@@ -131,23 +117,23 @@ const ExplorePage: React.FC = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#0a0e27',
+        backgroundColor: '#080b1a',
     },
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingHorizontal: 15,
-        paddingVertical: 16,
-        backgroundColor: '#0a0e27',
+        paddingHorizontal: H_PAD,
+        paddingVertical: 24,
+        backgroundColor: '#080b1a',
         borderBottomWidth: 0.5,
-        borderBottomColor: 'rgba(255, 255, 255, 0.05)',
+        borderBottomColor: 'rgba(255,255,255,0.06)',
     },
     headerTitle: {
-        fontSize: 28,
-        fontWeight: '700',
+        fontFamily: 'Forum_400Regular',
+        fontSize: 30,
         color: '#ffffff',
-        letterSpacing: 0.5,
+        letterSpacing: 1,
     },
     notificationBadge: {
         width: 20,
@@ -162,53 +148,65 @@ const styles = StyleSheet.create({
     },
     scrollView: {
         flex: 1,
-        paddingHorizontal: 15,
-        paddingTop: 12,
     },
-    cardGrid: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'space-between',
+    scrollContent: {
+        paddingHorizontal: H_PAD,
+        paddingTop: 14,
         paddingBottom: 40,
+        gap: GAP,
+    },
+    row: {
+        flexDirection: 'row',
+        gap: GAP,
     },
     cardWrapper: {
-        marginBottom: 15,
-    },
-    card: {
-        backgroundColor: '#1a1f3a',
-        borderRadius: CARD_BORDER_RADIUS,
+        width: CARD_WIDTH,
+        height: CARD_HEIGHT,
         overflow: 'hidden',
+        backgroundColor: '#0d1020',
+        // Sharp border
+        borderWidth: 1,
+        borderColor: 'rgba(255,255,255,0.1)',
+        borderRadius: 0,
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 10 },
-        shadowOpacity: 0.35,
-        shadowRadius: 15,
+        shadowOffset: { width: 0, height: 6 },
+        shadowOpacity: 0.5,
+        shadowRadius: 12,
         elevation: 8,
     },
-    cardBackground: {
-        ...StyleSheet.absoluteFillObject,
-    },
-    darkOverlay: {
-        ...StyleSheet.absoluteFillObject,
-        zIndex: 1,
+    cardSelected: {
+        borderColor: 'rgba(120,80,255,0.7)',
+        shadowColor: '#7b4fff',
+        shadowOpacity: 0.6,
+        shadowRadius: 18,
+        elevation: 14,
     },
     contentContainer: {
-        flex: 1,
-        paddingHorizontal: 16,
-        paddingBottom: 16,
-        justifyContent: 'flex-end',
-        zIndex: 2,
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        padding: 16,
     },
     cardTitle: {
-        fontSize: 18,
-        fontWeight: '700',
-        color: '#ffffff',
+        fontFamily: 'Forum_400Regular',
+        fontSize: 22,
+        color: '#f0ecff',
+        lineHeight: 28,
         marginBottom: 8,
-        lineHeight: 24,
     },
-    cardSubtitle: {
-        fontSize: 12,
-        fontWeight: '500',
-        color: '#a8a8a8',
+    divider: {
+        width: 28,
+        height: 1,
+        backgroundColor: 'rgba(255,255,255,0.2)',
+        marginBottom: 8,
+    },
+    metaText: {
+        fontFamily: 'Nunito_300Light',
+        fontSize: 11,
+        color: 'rgba(255,255,255,0.38)',
+        letterSpacing: 0.8,
+        textTransform: 'uppercase',
     },
 });
 
