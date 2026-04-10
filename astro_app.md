@@ -248,7 +248,7 @@ Multi-step flow after first sign-up, gated by `profiles.is_onboarded`.
 * **User Profile [id]** — View another user's full profile + compatibility badge. "Like" / "Pass" / "Super Like" actions.
 * **Compatibility Report [id]** — Deep-dive: Guna Milan score (/36), strengths, challenges, AI narrative, house-by-house breakdown.
 ### Settings Pages (existing, reorganize)
-* Settings menu, Account, Notifications, Security, Privacy Policy, Terms, About Us, Contact Us, Community Guidelines.
+*  menu, Account, Notifications, Security, Privacy Policy, Terms, About Us, Contact Us, Community Guidelines.
 ## AI Integration Points
 1. **Compatibility scoring** — Given two users' birth_details, compute Guna Milan + AI narrative (call LLM API from Supabase Edge Function).
 2. **Daily horoscope generation** — Cron job (Supabase pg_cron or Edge Function) generates daily horoscope per zodiac sign.

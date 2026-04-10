@@ -4,9 +4,14 @@ export default function SettingsLayout() {
     return (
         <Stack
             screenOptions={{
-                headerStyle: { backgroundColor: "#0F172A" },
+                headerStyle: { backgroundColor: "#000000ff" },
                 headerTintColor: "white",
-                headerTitleStyle: { color: "white" },
+                headerTitleStyle: {
+                    fontFamily: "Forum_400Regular",
+                    color: "#ffffff",
+                    fontSize: 22,
+                    letterSpacing:1,
+                },
                 headerShown: false,
             }}
         >
@@ -20,6 +25,5 @@ export default function SettingsLayout() {
             <Stack.Screen name="contact" />
             <Stack.Screen name="community_guidelines" />
         </Stack>
-
     )
 }

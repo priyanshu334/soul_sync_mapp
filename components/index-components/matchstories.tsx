@@ -3,7 +3,7 @@ import MatchStoryItem from "./MatchStoryItem"
 
 export default function MatchesStories() {
     return (
-        <View style={{ marginTop: 10 }}>
+        <View style={{ marginTop: 20 }}>
             <Text
                 style={{
                     color: "white",
@@ -13,7 +13,7 @@ export default function MatchesStories() {
                     marginBottom: 12,
                 }}
             >
-                Your Cosmic Matches ✨
+                Your Cosmic Matches 
             </Text>
 
             <ScrollView

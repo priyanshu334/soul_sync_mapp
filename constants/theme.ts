@@ -6,8 +6,8 @@ export const COLORS = {
   white: "#ffffff",
   gray: "#BFBFBF",
 
-  primaryStart: "#6A00F4",
-  primaryEnd: "#C77DFF",
+  primaryStart: "#000000ff",
+  primaryEnd: "#dfdae4ff",
 
   // Added for Register Screen compatibility
   overlay: "rgba(0,0,0,0.4)", 
@@ -26,7 +26,7 @@ export const SIZES = {
 export const GLOBAL = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: "#000",
   },
   center: {
     justifyContent: "center",

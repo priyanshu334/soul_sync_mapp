@@ -5,7 +5,7 @@ import { SafeAreaView, ScrollView } from "react-native"
 
 export default function HomeScreen() {
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#0F172A" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#000000ff" }}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <TopBar />
         <MatchesStories />

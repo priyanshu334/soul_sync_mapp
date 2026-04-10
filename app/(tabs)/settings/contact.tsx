@@ -12,37 +12,33 @@ import {
 
 export default function ContactUs() {
     const socials = [
-        {
-            name: "Instagram",
-            icon: <FontAwesome6 name="instagram" size={24} color={COLORS.white} />,
-            link: "https://instagram.com/yourapp"
-        },
-        {
-            name: "Facebook",
-            icon: <FontAwesome6 name="facebook" size={24} color={COLORS.white} />,
-            link: "https://facebook.com/yourapp"
-        },
-        {
-            name: "Threads",
-            icon: <FontAwesome6 name="threads" size={24} color={COLORS.white} />,
-            link: "https://threads.net/@yourapp"
-        },
-        {
-            name: "X",
-            icon: <FontAwesome6 name="x-twitter" size={24} color={COLORS.white} />,
-            link: "https://x.com/yourapp"
-        },
-        {
-            name: "LinkedIn",
-            icon: <FontAwesome6 name="linkedin" size={24} color={COLORS.white} />,
-            link: "https://linkedin.com/company/yourapp"
-        },
-        {
-            name: "Reddit",
-            icon: <FontAwesome6 name="reddit" size={24} color={COLORS.white} />,
-            link: "https://reddit.com/r/yourapp"
-        }
-    ];
+    {
+        name: "Instagram",
+        icon: <FontAwesome6 name="instagram" size={24} color={COLORS.white} />,
+        link: "https://www.instagram.com/_lovitche_?igsh=bjdqZzJuZ3BkYjU5"
+    },
+    {
+        name: "Facebook",
+        icon: <FontAwesome6 name="facebook" size={24} color={COLORS.white} />,
+        link: "https://www.facebook.com/share/14WWooFre67/"
+    },
+    {
+        name: "Threads",
+        icon: <FontAwesome6 name="threads" size={24} color={COLORS.white} />,
+        link: "https://www.threads.com/@_lovitche_"
+    },
+    {
+        name: "X",
+        icon: <FontAwesome6 name="x-twitter" size={24} color={COLORS.white} />,
+        link: "https://x.com/Lovitche_?t=eG8p4F_M_Zflnc9vR2mnMg&s=09"
+    },
+    {
+        name: "LinkedIn",
+        icon: <FontAwesome6 name="linkedin" size={24} color={COLORS.white} />,
+        link: "https://www.linkedin.com/in/love-mantrraa-385593397"
+    }
+];
+    
 
     const openLink = (url: string) => {
         Linking.openURL(url).catch((err) => console.error("Couldn't load page", err));
@@ -93,7 +89,9 @@ export default function ContactUs() {
 
 const styles = StyleSheet.create({
     scrollContainer: {
-        padding: 20,
+        flexGrow: 1,
+        backgroundColor: COLORS.background,
+        padding: 60,
         alignItems: "center",
     },
     card: {

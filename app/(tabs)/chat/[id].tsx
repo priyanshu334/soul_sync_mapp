@@ -13,7 +13,7 @@ export default function ChatScreen() {
     const [input, setInput] = useState("")
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: "#0F172A" }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: "#000000ff" }}>
             <FlatList
                 data={messages}
                 keyExtractor={(item) => item.id}
