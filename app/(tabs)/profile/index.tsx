@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import { router } from "expo-router";
 import React, { useState } from "react";
 import {
   Dimensions,
@@ -36,6 +37,14 @@ export default function ProfileScreen() {
             <LinearGradient colors={['transparent', 'rgba(0,0,0,0.8)', '#000']} style={styles.heroOverlay} />
           </ImageBackground>
 
+          <TouchableOpacity
+            style={styles.settingsBtn}
+            activeOpacity={0.8}
+            onPress={() => router.push("/(tabs)/profile/(settings)")}
+          >
+            <Ionicons name="settings-outline" size={22} color="#fff" />
+          </TouchableOpacity>
+
           <View style={styles.headerContent}>
             <Image
               source={{ uri: "https://images.unsplash.com/photo-1546961329-78bef0414d7c?q=80&w=400" }}
@@ -64,7 +73,7 @@ export default function ProfileScreen() {
           </View>
 
           <Text style={styles.bioText}>
-            I'm a simple designer and very passionate about what I do. Inspired by the everyday world around me.
+            I&apos;m a simple designer and very passionate about what I do. Inspired by the everyday world around me.
           </Text>
 
           {/* KUNDLI CARD - GLASSMORPHISM LOOK */}
@@ -192,4 +201,19 @@ const styles = StyleSheet.create({
   modalBg: { flex: 1, backgroundColor: 'rgba(0,0,0,0.98)', justifyContent: 'center' },
   fullImg: { width: width, height: width * 1.5 },
   closeBtn: { position: 'absolute', top: 50, right: 20, zIndex: 10 }
+  ,
+  settingsBtn: {
+    position: "absolute",
+    top: 52,
+    right: 20,
+    zIndex: 5,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(15, 23, 42, 0.65)",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.2)",
+  }
 });
