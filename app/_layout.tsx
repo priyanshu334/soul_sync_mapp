@@ -1,7 +1,8 @@
-import { AuthProvider, useAuth } from '@/providers/AuthProvider';
-import { Stack, useRouter, useSegments } from 'expo-router';
-import { useEffect } from 'react';
-import { ActivityIndicator, View } from 'react-native';
+import { AuthProvider, useAuth } from "@/providers/AuthProvider";
+import { ModalStateProvider } from "@/providers/ModalStateProvider";
+import { Stack, useRouter, useSegments } from "expo-router";
+import { useEffect } from "react";
+import { ActivityIndicator, View } from "react-native";
 
 function RootNavigator() {
   const { session, loading } = useAuth();
@@ -12,21 +13,21 @@ function RootNavigator() {
     if (loading) return;
 
     // Check if the user is currently in the (auth) group
-    const inAuthGroup = segments[0] === '(auth)';
+    const inAuthGroup = segments[0] === "(auth)";
 
     if (!session && !inAuthGroup) {
       // If no session, send them to the auth group
       // Make sure you have an index.tsx or login.tsx inside (auth)
-      router.replace('/(auth)');
+      router.replace("/(auth)");
     } else if (session && inAuthGroup) {
       // If they ARE logged in but trying to see login screens, send to tabs
-      router.replace('/(tabs)');
+      router.replace("/(tabs)");
     }
   }, [session, loading, segments]);
 
   if (loading) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <ActivityIndicator size="large" />
       </View>
     );
@@ -43,8 +44,10 @@ function RootNavigator() {
 
 export default function Layout() {
   return (
-    <AuthProvider>
-      <RootNavigator />
-    </AuthProvider>
-  )
+    <ModalStateProvider>
+      <AuthProvider>
+        <RootNavigator />
+      </AuthProvider>
+    </ModalStateProvider>
+  );
 }

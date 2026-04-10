@@ -1,19 +1,19 @@
+import { useModalState } from "@/providers/ModalStateProvider";
 import React, { useRef, useState } from "react";
 import {
-  Animated,
-  Dimensions,
-  Modal,
-  PanResponder,
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    Animated,
+    Dimensions,
+    Modal,
+    PanResponder,
+    SafeAreaView,
+    StatusBar,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from "react-native";
-import Svg, { Circle, Line, Path, Polygon, Rect, G, Defs, LinearGradient, Stop } from "react-native-svg";
-
+import Svg, { Circle, Line, Path, Polygon } from "react-native-svg";
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const SWIPE_THRESHOLD = 80;
 const H_PAD = 15;
@@ -77,7 +77,15 @@ type OverlayType = "NOPE" | "LIKE" | "FIRE" | "SUPER" | null;
 
 const IconClose = () => (
   <Svg width={22} height={22} viewBox="0 0 24 24">
-    <Circle cx="12" cy="12" r="11" fill="none" stroke="#ff6b6b" strokeWidth="1.5" opacity="0.8" />
+    <Circle
+      cx="12"
+      cy="12"
+      r="11"
+      fill="none"
+      stroke="#ff6b6b"
+      strokeWidth="1.5"
+      opacity="0.8"
+    />
     <Line
       x1="8"
       y1="8"
@@ -138,7 +146,14 @@ const IconHeart = () => (
 
 const IconProfile = () => (
   <Svg width={18} height={18} viewBox="0 0 24 24">
-    <Circle cx="12" cy="8" r="4" fill="none" stroke="#a8a8b8" strokeWidth="1.2" />
+    <Circle
+      cx="12"
+      cy="8"
+      r="4"
+      fill="none"
+      stroke="#a8a8b8"
+      strokeWidth="1.2"
+    />
     <Path
       d="M4 20c0-4.418 3.582-8 8-8s8 3.582 8 8"
       stroke="#a8a8b8"
@@ -424,6 +439,7 @@ export default function ExploreScreen() {
   const [overlayType, setOverlayType] = useState<OverlayType>(null);
   const [toast, setToast] = useState({ message: "", visible: false, key: 0 });
   const [msgVisible, setMsgVisible] = useState(false);
+  const { setIsModalOpen } = useModalState();
 
   const showToast = (message: string) => {
     setToast((prev) => ({ message, visible: true, key: prev.key + 1 }));
@@ -469,6 +485,7 @@ export default function ExploreScreen() {
 
   const handleSendMessage = (msg: string) => {
     setMsgVisible(false);
+    setIsModalOpen(false);
     if (msg) showToast("Message sent!");
   };
 
@@ -558,14 +575,20 @@ export default function ExploreScreen() {
           <View style={styles.msgRow}>
             <TouchableOpacity
               style={styles.msgBarInput}
-              onPress={() => setMsgVisible(true)}
+              onPress={() => {
+                setMsgVisible(true);
+                setIsModalOpen(true);
+              }}
               activeOpacity={0.8}
             >
               <Text style={styles.msgPlaceholder}>Write a message...</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.msgSendBtn}
-              onPress={() => setMsgVisible(true)}
+              onPress={() => {
+                setMsgVisible(true);
+                setIsModalOpen(true);
+              }}
               activeOpacity={0.8}
             >
               <IconSend />
@@ -582,7 +605,10 @@ export default function ExploreScreen() {
         <MessageModal
           visible={msgVisible}
           targetName={profiles[0]?.name ?? ""}
-          onClose={() => setMsgVisible(false)}
+          onClose={() => {
+            setMsgVisible(false);
+            setIsModalOpen(false);
+          }}
           onSend={handleSendMessage}
         />
       </View>
