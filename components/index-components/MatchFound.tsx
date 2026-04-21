@@ -2,7 +2,6 @@ import React from "react";
 import {
   View,
   Text,
-  FlatList,
   ImageBackground,
   StyleSheet,
   Dimensions,
@@ -12,7 +11,14 @@ import { LinearGradient } from "expo-linear-gradient";
 const { width } = Dimensions.get("window");
 const CARD_WIDTH = width * 0.44;
 
-const data = [
+type MatchItem = {
+  id: string;
+  name: string;
+  location: string;
+  image: string;
+};
+
+const data: MatchItem[] = [
   {
     id: "1",
     name: "Azalea M",
@@ -43,7 +49,7 @@ const data = [
   },
 ];
 
-const MatchCard = ({ item }) => {
+const MatchCard = ({ item }: { item: MatchItem }) => {
   return (
     <View style={styles.card}>
       <ImageBackground
@@ -72,21 +78,29 @@ const MatchCard = ({ item }) => {
 };
 
 export default function MatchFound() {
+  // Render pairs of cards in rows to mimic numColumns={2}
+  const rows: (typeof data)[] = [];
+  for (let i = 0; i < data.length; i += 2) {
+    rows.push(data.slice(i, i + 2));
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>
         Found you{"\n"}matches!!
       </Text>
 
-      <FlatList
-        data={data}
-        renderItem={({ item }) => <MatchCard item={item} />}
-        keyExtractor={(item) => item.id}
-        numColumns={2}
-        columnWrapperStyle={{ justifyContent: "space-between" }}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 100 }}
-      />
+      <View style={styles.grid}>
+        {rows.map((row, rowIndex) => (
+          <View key={rowIndex} style={styles.row}>
+            {row.map((item) => (
+              <MatchCard key={item.id} item={item} />
+            ))}
+            {/* Fill empty slot if odd number of items */}
+            {row.length < 2 && <View style={{ width: CARD_WIDTH }} />}
+          </View>
+        ))}
+      </View>
     </View>
   );
 }
@@ -97,6 +111,16 @@ const styles = StyleSheet.create({
     backgroundColor: "#000000ff",
     paddingHorizontal: 16,
     paddingTop: 60,
+  },
+
+  grid: {
+    paddingBottom: 100,
+  },
+
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 0,
   },
 
   heading: {
