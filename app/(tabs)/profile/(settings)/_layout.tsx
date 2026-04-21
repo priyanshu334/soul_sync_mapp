@@ -17,9 +17,9 @@ export default function SettingsLayout() {
         >
             <Stack.Screen name="index" />
             <Stack.Screen name="account" />
-            <Stack.Screen name="notifications" />
+            <Stack.Screen name="notification" />
             <Stack.Screen name="security" />
-            <Stack.Screen name="privacy_policy" />
+            <Stack.Screen name="privacy" />
             <Stack.Screen name="terms" />
             <Stack.Screen name="about" />
             <Stack.Screen name="contact" />

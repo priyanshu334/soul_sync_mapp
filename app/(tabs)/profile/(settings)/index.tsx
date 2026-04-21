@@ -30,13 +30,13 @@ const settingsGroups = [
       {
         title: "Account",
         icon: "person-outline",
-        route: "/(tabs)/settings/account",
+        route: "/(tabs)/profile/(settings)/account",
       },
     
       {
         title: "Security",
         icon: "lock-closed-outline",
-        route: "/(tabs)/settings/security",
+        route: "/(tabs)/profile/(settings)/security",
       },
     ],
   },
@@ -46,17 +46,17 @@ const settingsGroups = [
       {
         title: "Privacy Policy",
         icon: "document-text-outline",
-        route: "/(tabs)/settings/privacy",
+        route: "/(tabs)/profile/(settings)/privacy",
       },
       {
         title: "Terms & Conditions",
         icon: "document-outline",
-        route: "/(tabs)/settings/terms",
+        route: "/(tabs)/profile/(settings)/terms",
       },
       {
         title: "Community Guidelines",
         icon: "people-outline",
-        route: "/(tabs)/settings/community_guidelines",
+        route: "/(tabs)/profile/(settings)/community_guidelines",
       },
     ],
   },
@@ -66,12 +66,12 @@ const settingsGroups = [
       {
         title: "About Us",
         icon: "information-circle-outline",
-        route: "/(tabs)/settings/about",
+        route: "/(tabs)/profile/(settings)/about",
       },
       {
         title: "Contact Us",
         icon: "mail-outline",
-        route: "/(tabs)/settings/contact",
+        route: "/(tabs)/profile/(settings)/contact",
       },
     ],
   },
