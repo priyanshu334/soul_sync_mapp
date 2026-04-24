@@ -4,7 +4,7 @@ import {
   OnboardingProvider,
   useOnboarding,
 } from "@/providers/OnboardingProvider";
-import { Stack, useRouter, useSegments, useRootNavigationState } from "expo-router";
+import { Stack, useRootNavigationState, useRouter, useSegments } from "expo-router";
 import { useEffect } from "react";
 import { ActivityIndicator, View } from "react-native";
 
@@ -38,6 +38,7 @@ function RootNavigator() {
 
     // User logged in but onboarding not done
     if (session && !onboardingCompleted && !inOnboardingGroup) {
+      // Explicitly go to the first onboarding screen
       router.replace("/(onboarding)/username");
       return;
     }
@@ -47,7 +48,7 @@ function RootNavigator() {
       router.replace("/(tabs)");
       return;
     }
-  }, [session, loading, onboardingCompleted, segments, rootNavigationState?.key]);
+  }, [session, loading, onboardingCompleted, segments, rootNavigationState?.key, onboardingLoading]);
 
   if (loading || (session && onboardingLoading)) {
     return (
@@ -65,11 +66,11 @@ function RootNavigator() {
   }
 
   return (
-    // Let Expo Router auto-register routes from the filesystem.
-    // Manually registering group routes here can cause navigation actions like
-    // replace("(onboarding)", { screen: "username" }) to be dispatched against a
-    // navigator that doesn't recognize the group route name.
-    <Stack screenOptions={{ headerShown: false }} />
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="(auth)" />
+      <Stack.Screen name="(onboarding)" />
+      <Stack.Screen name="(tabs)" />
+    </Stack>
   );
 }
 

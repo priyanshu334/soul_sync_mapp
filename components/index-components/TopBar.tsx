@@ -29,7 +29,7 @@ export default function TopBar() {
       <Text style={cosmic.headerTitle}>Cosmic</Text>
 
       <View style={{ flexDirection: "row", gap: 18 }}>
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity onPress={() => router.push("/notifications" as any)}>
           <Ionicons name="notifications-outline" size={24} color="white" />
         </TouchableOpacity>
 

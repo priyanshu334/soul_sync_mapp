@@ -22,7 +22,7 @@ export const getProfile = async (userId: string) => {
     .from('profiles')
     .select('*')
     .eq('id', userId)
-    .single()
+    .maybeSingle()
 }
 
 export const updateProfile = async (profile: Partial<UserProfile> & { id: string }) => {
@@ -70,12 +70,26 @@ export const uploadImage = async (userId: string, uri: string) => {
   return publicUrlData.publicUrl
 }
 export const getExploreProfiles = async (currentUserId: string) => {
-  return supabase
+  // 1. Get interacted user IDs
+  const { data: interactions } = await supabase
+    .from('interactions')
+    .select('target_id')
+    .eq('user_id', currentUserId)
+
+  const interactedIds = interactions?.map(i => i.target_id) || []
+
+  // 2. Query profiles
+  let query = supabase
     .from('profiles')
     .select('*')
     .neq('id', currentUserId)
     .eq('onboarding_completed', true)
-    .limit(20)
+
+  if (interactedIds.length > 0) {
+    query = query.not('id', 'in', `(${interactedIds.join(',')})`)
+  }
+
+  return query.limit(20)
 }
 
 export const getMatchSuggestions = async (currentUserId: string) => {

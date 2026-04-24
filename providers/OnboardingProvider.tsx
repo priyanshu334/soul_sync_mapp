@@ -68,18 +68,23 @@ export const OnboardingProvider = ({
 
   const checkOnboardingStatus = async (userId: string) => {
     setLoading(true);
+    setOnboardingCompleted(false); // Reset to false before checking
     try {
       const { data, error } = await supabase
         .from("profiles")
         .select("onboarding_completed")
         .eq("id", userId)
-        .single();
+        .maybeSingle(); // Use maybeSingle to avoid error on 0 rows
 
       if (data) {
         setOnboardingCompleted(!!data.onboarding_completed);
+      } else {
+        // No profile found means onboarding is definitely not completed
+        setOnboardingCompleted(false);
       }
     } catch (error) {
       console.error("Error checking onboarding status:", error);
+      setOnboardingCompleted(false);
     } finally {
       setLoading(false);
     }

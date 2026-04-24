@@ -8,6 +8,8 @@ import { useModalState } from "@/providers/ModalStateProvider";
 import { useAuth } from "@/providers/AuthProvider";
 import { getExploreProfiles, UserProfile } from "@/src/services/profile.service";
 import { getZodiacSign } from "@/src/utils/zodiac";
+import { recordInteraction } from "@/src/services/interaction.service";
+import { chatService } from "@/src/services/chat.service";
 import React, { useState, useEffect } from "react";
 import { StatusBar, Text, View, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -71,31 +73,35 @@ export default function ExploreScreen() {
     setTimeout(() => setProfiles((prev) => prev.slice(1)), 350);
   };
 
-  const handleDislike = () => {
-    if (!topProfile) return;
+  const handleDislike = async () => {
+    if (!topProfile || !session?.user?.id) return;
     triggerOverlay("NOPE");
     removeTop();
+    await recordInteraction(session.user.id, topProfile.id, 'DISLIKE');
   };
 
-  const handleLike = () => {
-    if (!topProfile) return;
+  const handleLike = async () => {
+    if (!topProfile || !session?.user?.id) return;
     triggerOverlay("LIKE");
     showToast(`Liked ${topProfile.name}!`);
     removeTop();
+    await recordInteraction(session.user.id, topProfile.id, 'LIKE');
   };
 
-  const handleFire = () => {
-    if (!topProfile) return;
+  const handleFire = async () => {
+    if (!topProfile || !session?.user?.id) return;
     triggerOverlay("FIRE");
     showToast(`Fire sent to ${topProfile.name}!`);
     removeTop();
+    await recordInteraction(session.user.id, topProfile.id, 'FIRE');
   };
 
-  const handleSuperLike = () => {
-    if (!topProfile) return;
+  const handleSuperLike = async () => {
+    if (!topProfile || !session?.user?.id) return;
     triggerOverlay("SUPER");
     showToast(`Super liked ${topProfile.name}!`);
     removeTop();
+    await recordInteraction(session.user.id, topProfile.id, 'SUPER_LIKE');
   };
 
   const handleViewProfile = () => {
@@ -114,9 +120,12 @@ export default function ExploreScreen() {
     setIsModalOpen(false);
   };
 
-  const handleSendMessage = (msg: string) => {
+  const handleSendMessage = async (msg: string) => {
     closeMessageModal();
-    if (msg) showToast("Message sent!");
+    if (msg && topProfile && session?.user?.id) {
+      showToast("Message sent!");
+      await chatService.sendMessage(session.user.id, topProfile.id, msg);
+    }
   };
 
   const handleRefresh = () => fetchProfiles();

@@ -6,28 +6,33 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import { ScrollView, ActivityIndicator, View } from "react-native"
 import React, { useState, useEffect } from "react"
 import { useAuth } from "@/providers/AuthProvider"
-import { getMatchSuggestions, UserProfile } from "@/src/services/profile.service"
+import { getMatchSuggestions, getProfile, UserProfile } from "@/src/services/profile.service"
 
 export default function HomeScreen() {
   const { session } = useAuth();
   const [profiles, setProfiles] = useState<UserProfile[]>([]);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchMatches() {
+    async function fetchData() {
       if (!session?.user?.id) return;
       try {
-        const { data, error } = await getMatchSuggestions(session.user.id);
-        if (error) throw error;
-        setProfiles(data || []);
+        const [matchesRes, profileRes] = await Promise.all([
+          getMatchSuggestions(session.user.id),
+          getProfile(session.user.id)
+        ]);
+
+        if (matchesRes.data) setProfiles(matchesRes.data);
+        if (profileRes.data) setUserProfile(profileRes.data as UserProfile);
       } catch (error) {
-        console.error("Error fetching match suggestions:", error);
+        console.error("Error fetching home data:", error);
       } finally {
         setLoading(false);
       }
     }
 
-    fetchMatches();
+    fetchData();
   }, [session?.user?.id]);
 
   if (loading) {
@@ -40,11 +45,14 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#000000ff" }}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView 
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
         <TopBar />
         <MatchesStories profiles={profiles} />
         <MatchFound profiles={profiles} />
-        <HoroscopeFeed />
+        <HoroscopeFeed userProfile={userProfile} />
       </ScrollView>
     </SafeAreaView>
   )
