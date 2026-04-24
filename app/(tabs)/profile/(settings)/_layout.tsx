@@ -10,7 +10,6 @@ export default function SettingsLayout() {
                     fontFamily: "Forum_400Regular",
                     color: "#ffffff",
                     fontSize: 22,
-                    letterSpacing:1,
                 },
                 headerShown: false,
             }}

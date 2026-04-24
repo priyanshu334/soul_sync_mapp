@@ -7,6 +7,7 @@ export type Profile = {
   zodiac: string;
   tags: string[];
   bgColors: [string, string];
+  images?: string[];
 };
 
 export type OverlayType = "NOPE" | "LIKE" | "FIRE" | "SUPER" | null;

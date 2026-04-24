@@ -25,7 +25,7 @@ export function ProfileHeader() {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.iconButton}
-            onPress={() => router.push("/(tabs)/settings/privacy")}
+            onPress={() => router.push("/(tabs)/profile/(settings)/privacy")}
           >
             <Ionicons name="settings-outline" size={22} color={COLORS.white} />
           </TouchableOpacity>

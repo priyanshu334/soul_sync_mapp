@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dimensions,
   Image,
@@ -12,15 +12,55 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
+  ActivityIndicator
 } from "react-native";
 import Svg, { Line, Path } from "react-native-svg";
+import { useAuth } from "@/providers/AuthProvider";
+import { getProfile, UserProfile } from "@/src/services/profile.service";
+import { getZodiacSign } from "@/src/utils/zodiac";
 
 const { width } = Dimensions.get("window");
 
+const DEFAULT_AVATAR = "https://images.unsplash.com/photo-1546961329-78bef0414d7c?q=80&w=400";
+const DEFAULT_COVER = "https://images.unsplash.com/photo-1546961329-78bef0414d7c?q=80&w=1080";
+
 export default function ProfileScreen() {
+  const { session } = useAuth();
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [loading, setLoading] = useState(true);
   const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('basic');
+
+  useEffect(() => {
+    async function fetchProfile() {
+      if (!session?.user?.id) return;
+      
+      try {
+        const { data, error } = await getProfile(session.user.id);
+        if (error) throw error;
+        setProfile(data);
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchProfile();
+  }, [session?.user?.id]);
+
+  if (loading) {
+    return (
+      <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator size="large" color="#db2777" />
+      </View>
+    );
+  }
+
+  const profileImages = profile?.images || [];
+  const primaryImage = profileImages[0] || DEFAULT_AVATAR;
+  const coverImage = profileImages[1] || profileImages[0] || DEFAULT_COVER;
 
   return (
     <View style={styles.container}>
@@ -30,7 +70,7 @@ export default function ProfileScreen() {
         {/* HERO SECTION */}
         <View style={styles.heroSection}>
           <ImageBackground
-            source={{ uri: "https://images.unsplash.com/photo-1546961329-78bef0414d7c?q=80&w=1080" }}
+            source={{ uri: coverImage }}
             style={styles.heroBg}
             blurRadius={10}
           >
@@ -47,19 +87,26 @@ export default function ProfileScreen() {
 
           <View style={styles.headerContent}>
             <Image
-              source={{ uri: "https://images.unsplash.com/photo-1546961329-78bef0414d7c?q=80&w=400" }}
+              source={{ uri: primaryImage }}
               style={styles.profileImage}
             />
-            <Text style={styles.userName}>Priya Sharma</Text>
+            <Text style={styles.userName}>{profile?.username || "Anonymous"}</Text>
             <View style={styles.jobBadgeContainer}>
               <LinearGradient
                 colors={['#9333ea', '#db2777']}
                 start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
                 style={styles.jobBadge}
               >
-                <Text style={styles.jobText}>UI/UX Designer</Text>
+                <Text style={styles.jobText}>Astro Member</Text>
               </LinearGradient>
-              <Text style={styles.socialHandle}>@priya.sharma</Text>
+              <Text style={styles.socialHandle}>@{profile?.username?.toLowerCase().replace(/\s+/g, '.') || "user"}</Text>
+              
+              <TouchableOpacity 
+                style={styles.editProfileBtn}
+                onPress={() => router.push("/(tabs)/profile/edit")}
+              >
+                <Text style={styles.editProfileText}>Edit Profile</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -67,13 +114,13 @@ export default function ProfileScreen() {
         {/* STATS / TAGS */}
         <View style={styles.contentWrapper}>
           <View style={styles.tagRow}>
-            {['Photography', 'Travel', 'Art'].map(tag => (
+            {(profile?.interests || ['Astrology', 'Spirituality']).map((tag: string) => (
               <View key={tag} style={styles.tag}><Text style={styles.tagText}>{tag}</Text></View>
             ))}
           </View>
 
           <Text style={styles.bioText}>
-            I&apos;m a simple designer and very passionate about what I do. Inspired by the everyday world around me.
+            {profile?.bio || "No bio yet."}
           </Text>
 
           {/* KUNDLI CARD - GLASSMORPHISM LOOK */}
@@ -90,10 +137,10 @@ export default function ProfileScreen() {
 
             {activeTab === 'basic' ? (
               <View style={styles.grid}>
-                <DetailItem label="Birth Date" val="March 15, 1999" icon="calendar-outline" />
-                <DetailItem label="Birth Time" val="05:30 AM" icon="time-outline" />
-                <DetailItem label="Birth Place" val="Mumbai, MH" icon="location-outline" />
-                <DetailItem label="Zodiac" val="♓ Pisces" icon="star-outline" />
+                <DetailItem label="Birth Date" val={profile?.birth_date || "Not set"} icon="calendar-outline" />
+                <DetailItem label="Birth Time" val={profile?.birth_time || "Not set"} icon="time-outline" />
+                <DetailItem label="Birth Place" val={profile?.birth_place || "Not set"} icon="location-outline" />
+                <DetailItem label="Zodiac" val={getZodiacSign(profile?.birth_date)} icon="star-outline" />
               </View>
             ) : (
               <View style={styles.chartContainer}>
@@ -113,18 +160,22 @@ export default function ProfileScreen() {
           {/* GALLERY */}
           <Text style={styles.sectionHeading}>Gallery</Text>
           <View style={styles.galleryGrid}>
-            {[1, 2, 3, 4].map((item, idx) => (
-              <TouchableOpacity
-                key={idx}
-                style={styles.galleryItem}
-                onPress={() => setSelectedPhoto("https://images.unsplash.com/photo-1546961329-78bef0414d7c")}
-              >
-                <Image
-                  source={{ uri: `https://picsum.photos/id/${idx + 20}/400/400` }}
-                  style={styles.galleryImage}
-                />
-              </TouchableOpacity>
-            ))}
+            {profileImages.length > 0 ? (
+              profileImages.map((img: string, idx: number) => (
+                <TouchableOpacity
+                  key={idx}
+                  style={styles.galleryItem}
+                  onPress={() => setSelectedPhoto(img)}
+                >
+                  <Image
+                    source={{ uri: img }}
+                    style={styles.galleryImage}
+                  />
+                </TouchableOpacity>
+              ))
+            ) : (
+              <Text style={{ color: '#64748b', textAlign: 'center', width: '100%', marginTop: 20 }}>No photos uploaded yet.</Text>
+            )}
           </View>
         </View>
         <View style={{ height: 100 }} />
@@ -215,5 +266,19 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(15, 23, 42, 0.65)",
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.2)",
-  }
+  },
+  editProfileBtn: {
+    marginTop: 15,
+    paddingHorizontal: 20,
+    paddingVertical: 8,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: '#334155',
+    backgroundColor: '#0f172a',
+  },
+  editProfileText: {
+    color: '#fff',
+    fontSize: 13,
+    fontWeight: '600',
+  },
 });

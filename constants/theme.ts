@@ -1,19 +1,22 @@
 import { StyleSheet } from "react-native";
 
 export const COLORS = {
-  background: "#000",
-  surface: "#0a0a0a",
+  background: "#0F172A",
+  surface: "#1E293B",
   white: "#ffffff",
-  gray: "#BFBFBF",
-
-  primaryStart: "#000000ff",
-  primaryEnd: "#dfdae4ff",
+  gray: "#94A3B8",
+  primary: "#7C3AED",
+  primaryStart: "#7C3AED",
+  primaryEnd: "#C026D3",
+  accent: "#F472B6",
+  error: "#EF4444",
+  success: "#10B981",
 
   // Added for Register Screen compatibility
-  overlay: "rgba(0,0,0,0.4)", 
-  inputBg: "rgba(255, 255, 255, 0.2)", // Light tint so text is visible on dark bg
+  overlay: "rgba(0,0,0,0.6)", 
+  inputBg: "rgba(30, 41, 59, 0.7)", 
   textPrimary: "#ffffff",
-  textSecondary: "#BFBFBF",
+  textSecondary: "#94A3B8",
 };
 
 export const SIZES = {

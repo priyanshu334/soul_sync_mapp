@@ -21,7 +21,7 @@ export default function TabsLayout() {
   const isTablet = width >= 768;
 
   // 🔥 Responsive scaling function (dynamic for all device sizes)
-  const scale = (size) => {
+  const scale = (size: number) => {
     // Adaptive base width detection
     let baseWidth = 375; // Default iPhone width
 
@@ -100,12 +100,14 @@ export default function TabsLayout() {
           ),
       }}
     >
-      {[
-        { name: "index", icon: "home" },
-        { name: "explore", icon: "star" },
-        { name: "chat", icon: "chatbubble" },
-        { name: "profile", icon: "person-circle" },
-      ].map((tab) => (
+      {(
+        [
+          { name: "index", icon: "home" },
+          { name: "explore", icon: "star" },
+          { name: "chat", icon: "chatbubble" },
+          { name: "profile", icon: "person-circle" },
+        ] as const
+      ).map((tab) => (
         <Tabs.Screen
           key={tab.name}
           name={tab.name}

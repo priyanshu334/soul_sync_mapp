@@ -7,53 +7,18 @@ import {
   Dimensions,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { UserProfile } from "@/src/services/profile.service";
 
 const { width } = Dimensions.get("window");
 const CARD_WIDTH = width * 0.44;
 
-type MatchItem = {
-  id: string;
-  name: string;
-  location: string;
-  image: string;
-};
-
-const data: MatchItem[] = [
-  {
-    id: "1",
-    name: "Azalea M",
-    location: "Bushwick, NY",
-    image:
-      "https://images.unsplash.com/photo-1544005313-94ddf0286df2",
-  },
-  {
-    id: "2",
-    name: "Imani J",
-    location: "Harlem, NY",
-    image:
-      "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e",
-  },
-  {
-    id: "3",
-    name: "Elodie S",
-    location: "Tribeca, NY",
-    image:
-      "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
-  },
-  {
-    id: "4",
-    name: "Naomi L",
-    location: "Astoria, NY",
-    image:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330",
-  },
-];
-
-const MatchCard = ({ item }: { item: MatchItem }) => {
+const MatchCard = ({ item }: { item: UserProfile }) => {
+  const primaryImage = item.images?.[0] || `https://i.pravatar.cc/300?u=${item.id}`;
+  
   return (
     <View style={styles.card}>
       <ImageBackground
-        source={{ uri: item.image }}
+        source={{ uri: primaryImage }}
         style={styles.image}
         imageStyle={{ borderRadius: 20 }}
       >
@@ -61,7 +26,7 @@ const MatchCard = ({ item }: { item: MatchItem }) => {
           colors={["transparent", "rgba(0,0,0,0.8)"]}
           style={styles.overlay}
         >
-          <Text style={styles.location}>📍 {item.location}</Text>
+          <Text style={styles.location}>📍 {item.birth_place || "Unknown"}</Text>
 
           <View style={styles.bottom}>
             <View style={styles.statusRow}>
@@ -69,7 +34,7 @@ const MatchCard = ({ item }: { item: MatchItem }) => {
               <Text style={styles.active}>Active</Text>
             </View>
 
-            <Text style={styles.name}>{item.name}</Text>
+            <Text style={styles.name}>{item.username || "Anonymous"}</Text>
           </View>
         </LinearGradient>
       </ImageBackground>
@@ -77,11 +42,13 @@ const MatchCard = ({ item }: { item: MatchItem }) => {
   );
 };
 
-export default function MatchFound() {
+export default function MatchFound({ profiles }: { profiles: UserProfile[] }) {
+  if (!profiles || profiles.length === 0) return null;
+
   // Render pairs of cards in rows to mimic numColumns={2}
-  const rows: (typeof data)[] = [];
-  for (let i = 0; i < data.length; i += 2) {
-    rows.push(data.slice(i, i + 2));
+  const rows: (UserProfile)[] [] = [];
+  for (let i = 0; i < profiles.length; i += 2) {
+    rows.push(profiles.slice(i, i + 2));
   }
 
   return (

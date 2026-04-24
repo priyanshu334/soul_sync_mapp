@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { Animated, Dimensions, PanResponder, Text, View } from "react-native";
+import { Animated, Dimensions, PanResponder, Text, View, ImageBackground } from "react-native";
 
 import { styles } from "@/components/explore/styles";
 import { OverlayType, Profile } from "@/components/explore/types";
@@ -87,7 +87,10 @@ export function ProfileCard({
       style={[styles.card, cardStyle]}
       {...(isTop ? panResponder.panHandlers : {})}
     >
-      <View style={[styles.coverBg, { backgroundColor: profile.bgColors[0] }]}>
+      <ImageBackground
+        source={profile.images?.[0] ? { uri: profile.images[0] } : undefined}
+        style={[styles.coverBg, { backgroundColor: profile.bgColors[0] }]}
+      >
         <View style={styles.coverOverlay} />
 
         <View style={styles.distBadge}>
@@ -152,7 +155,7 @@ export function ProfileCard({
             )}
           </>
         )}
-      </View>
+      </ImageBackground>
 
       <View style={styles.cardInfo}>
         <View style={styles.nameRow}>

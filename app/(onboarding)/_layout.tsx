@@ -5,7 +5,7 @@ export default function OnBoardingLayout() {
         <Stack screenOptions={{ headerShown: false, animation: "slide_from_right" }}>
             <Stack.Screen name="username" />
             <Stack.Screen name="birth-details" />
-            <Stack.Screen name="prefrenses" />
+            <Stack.Screen name="preferences" />
             <Stack.Screen name="photos" />
             <Stack.Screen name="bio" />
             <Stack.Screen name="review" />

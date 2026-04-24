@@ -1,20 +1,60 @@
 import { ActionBar } from "@/components/explore/ActionBar";
 import { CardStack } from "@/components/explore/CardStack";
-import { EXPLORE_PROFILES } from "@/components/explore/data";
 import { MessageModal } from "@/components/explore/MessageModal";
 import { styles } from "@/components/explore/styles";
 import { Toast } from "@/components/explore/Toast";
-import { OverlayType } from "@/components/explore/types";
+import { OverlayType, Profile } from "@/components/explore/types";
 import { useModalState } from "@/providers/ModalStateProvider";
-import React, { useState } from "react";
-import { SafeAreaView, StatusBar, Text, View } from "react-native";
+import { useAuth } from "@/providers/AuthProvider";
+import { getExploreProfiles, UserProfile } from "@/src/services/profile.service";
+import { getZodiacSign } from "@/src/utils/zodiac";
+import React, { useState, useEffect } from "react";
+import { StatusBar, Text, View, ActivityIndicator } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+const mapToProfile = (p: UserProfile): Profile => {
+  const birthDate = p.birth_date ? new Date(p.birth_date) : new Date();
+  const age = new Date().getFullYear() - birthDate.getFullYear();
+  
+  return {
+    id: p.id,
+    name: p.username || "Anonymous",
+    age: age,
+    location: p.birth_place || "Unknown",
+    dist: "Near you",
+    zodiac: getZodiacSign(p.birth_date),
+    tags: p.interests || [],
+    bgColors: ["#3a2060", "#1a3050"],
+    images: p.images
+  };
+};
 
 export default function ExploreScreen() {
-  const [profiles, setProfiles] = useState(EXPLORE_PROFILES);
+  const { session } = useAuth();
+  const [profiles, setProfiles] = useState<Profile[]>([]);
+  const [loading, setLoading] = useState(true);
   const [overlayType, setOverlayType] = useState<OverlayType>(null);
   const [toast, setToast] = useState({ message: "", visible: false, key: 0 });
   const [msgVisible, setMsgVisible] = useState(false);
   const { setIsModalOpen } = useModalState();
+
+  const fetchProfiles = async () => {
+    if (!session?.user?.id) return;
+    setLoading(true);
+    try {
+      const { data, error } = await getExploreProfiles(session.user.id);
+      if (error) throw error;
+      setProfiles((data || []).map(mapToProfile));
+    } catch (error) {
+      console.error("Error fetching explore profiles:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProfiles();
+  }, [session?.user?.id]);
 
   const topProfile = profiles[0];
 
@@ -79,7 +119,15 @@ export default function ExploreScreen() {
     if (msg) showToast("Message sent!");
   };
 
-  const handleRefresh = () => setProfiles(EXPLORE_PROFILES);
+  const handleRefresh = () => fetchProfiles();
+
+  if (loading) {
+    return (
+      <SafeAreaView style={[styles.safeArea, { justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator size="large" color="#6A00F4" />
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.safeArea}>

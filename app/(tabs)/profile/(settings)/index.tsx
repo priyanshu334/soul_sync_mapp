@@ -3,13 +3,13 @@ import { supabase } from "@/src/lib/supabase";
 import { Ionicons } from "@expo/vector-icons";
 import { Href, router } from "expo-router";
 import {
-    SafeAreaView,
     ScrollView,
     StyleSheet,
     Text,
     TouchableOpacity,
     View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const H_PAD = 10;
 
@@ -37,6 +37,11 @@ const settingsGroups = [
         title: "Security",
         icon: "lock-closed-outline",
         route: "/(tabs)/profile/(settings)/security",
+      },
+      {
+        title: "Notifications",
+        icon: "notifications-outline",
+        route: "/(tabs)/profile/(settings)/notification",
       },
     ],
   },

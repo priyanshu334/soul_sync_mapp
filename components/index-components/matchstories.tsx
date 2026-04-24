@@ -1,7 +1,10 @@
 import { ScrollView, Text, View } from "react-native"
 import MatchStoryItem from "./MatchStoryItem"
+import { UserProfile } from "@/src/services/profile.service"
 
-export default function MatchesStories() {
+export default function MatchesStories({ profiles }: { profiles: UserProfile[] }) {
+    if (!profiles || profiles.length === 0) return null;
+
     return (
         <View style={{ marginTop: 20 }}>
             <Text
@@ -21,8 +24,8 @@ export default function MatchesStories() {
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={{ paddingHorizontal: 20 }}
             >
-                {[...Array(8)].map((_, i) => (
-                    <MatchStoryItem key={i} />
+                {profiles.map((profile) => (
+                    <MatchStoryItem key={profile.id} profile={profile} />
                 ))}
             </ScrollView>
         </View>
