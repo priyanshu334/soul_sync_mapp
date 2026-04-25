@@ -5,9 +5,11 @@ import {
   ImageBackground,
   StyleSheet,
   Dimensions,
+  TouchableOpacity,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { UserProfile } from "@/src/services/profile.service";
+import { router } from "expo-router";
 
 const { width } = Dimensions.get("window");
 const CARD_WIDTH = width * 0.44;
@@ -16,7 +18,14 @@ const MatchCard = ({ item }: { item: UserProfile }) => {
   const primaryImage = item.images?.[0] || `https://i.pravatar.cc/300?u=${item.id}`;
   
   return (
-    <View style={styles.card}>
+    <TouchableOpacity 
+      style={styles.card}
+      activeOpacity={0.9}
+      onPress={() => router.push({
+        pathname: "/(tabs)/profile/[id]",
+        params: { id: item.id }
+      } as any)}
+    >
       <ImageBackground
         source={{ uri: primaryImage }}
         style={styles.image}
@@ -38,7 +47,7 @@ const MatchCard = ({ item }: { item: UserProfile }) => {
           </View>
         </LinearGradient>
       </ImageBackground>
-    </View>
+    </TouchableOpacity>
   );
 };
 

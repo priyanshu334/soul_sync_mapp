@@ -3,9 +3,10 @@ import { PremiumInput } from "@/components/ui/PremiumInput"
 import { COLORS } from "@/constants/theme"
 import { useOnboarding } from "@/providers/OnboardingProvider"
 import { Ionicons } from "@expo/vector-icons"
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker'
 import { router } from "expo-router"
 import { useState } from "react"
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from "react-native"
+import { Keyboard, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 
 export default function BirthDetails() {
     const { onboardingData, updateOnboardingData } = useOnboarding()
@@ -13,10 +14,41 @@ export default function BirthDetails() {
     const [birthTime, setBirthTime] = useState(onboardingData.birthTime || "")
     const [birthPlace, setBirthPlace] = useState(onboardingData.birthPlace || "")
 
+    const [showDatePicker, setShowDatePicker] = useState(false)
+    const [showTimePicker, setShowTimePicker] = useState(false)
+
     const handleContinue = () => {
         if (!birthDate || !birthTime || !birthPlace) return
         updateOnboardingData({ birthDate, birthTime, birthPlace })
         router.push("/preferences")
+    }
+
+    const onDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
+        setShowDatePicker(false);
+        if (selectedDate) {
+            const y = selectedDate.getFullYear();
+            const m = (selectedDate.getMonth() + 1).toString().padStart(2, '0');
+            const d = selectedDate.getDate().toString().padStart(2, '0');
+            setBirthDate(`${y}-${m}-${d}`);
+        }
+    };
+
+    const onTimeChange = (event: DateTimePickerEvent, selectedTime?: Date) => {
+        setShowTimePicker(false);
+        if (selectedTime) {
+            const hours = selectedTime.getHours().toString().padStart(2, '0');
+            const minutes = selectedTime.getMinutes().toString().padStart(2, '0');
+            setBirthTime(`${hours}:${minutes}`);
+        }
+    };
+
+    const formatDateDisplay = (dateStr: string) => {
+        if (!dateStr) return "";
+        if (dateStr.includes('-')) {
+            const [y, m, d] = dateStr.split('-');
+            return `${d}/${m}/${y}`;
+        }
+        return dateStr;
     }
 
     return (
@@ -40,19 +72,33 @@ export default function BirthDetails() {
                 </View>
 
                 <View style={styles.form}>
-                    <PremiumInput
-                        placeholder="Birth Date (DD/MM/YYYY)"
-                        value={birthDate}
-                        onChangeText={setBirthDate}
-                        icon={<Ionicons name="calendar-outline" size={20} color={COLORS.primary} />}
-                    />
+                    <Pressable onPress={() => {
+                        Keyboard.dismiss();
+                        setShowDatePicker(true);
+                    }}>
+                        <View pointerEvents="none">
+                            <PremiumInput
+                                placeholder="Birth Date (DD/MM/YYYY)"
+                                value={formatDateDisplay(birthDate)}
+                                editable={false}
+                                icon={<Ionicons name="calendar-outline" size={20} color={COLORS.primary} />}
+                            />
+                        </View>
+                    </Pressable>
 
-                    <PremiumInput
-                        placeholder="Birth Time (HH:MM)"
-                        value={birthTime}
-                        onChangeText={setBirthTime}
-                        icon={<Ionicons name="time-outline" size={20} color={COLORS.primary} />}
-                    />
+                    <Pressable onPress={() => {
+                        Keyboard.dismiss();
+                        setShowTimePicker(true);
+                    }}>
+                        <View pointerEvents="none">
+                            <PremiumInput
+                                placeholder="Birth Time (HH:MM)"
+                                value={birthTime}
+                                editable={false}
+                                icon={<Ionicons name="time-outline" size={20} color={COLORS.primary} />}
+                            />
+                        </View>
+                    </Pressable>
 
                     <PremiumInput
                         placeholder="Birth Place"
@@ -61,6 +107,26 @@ export default function BirthDetails() {
                         icon={<Ionicons name="location-outline" size={20} color={COLORS.primary} />}
                     />
                 </View>
+
+                {showDatePicker && (
+                    <DateTimePicker
+                        value={birthDate ? new Date(birthDate) : new Date()}
+                        mode="date"
+                        display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                        onChange={onDateChange}
+                        maximumDate={new Date()}
+                    />
+                )}
+
+                {showTimePicker && (
+                    <DateTimePicker
+                        value={new Date()}
+                        mode="time"
+                        is24Hour={true}
+                        display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                        onChange={onTimeChange}
+                    />
+                )}
 
                 <View style={{ height: 40 }} />
 
