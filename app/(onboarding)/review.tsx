@@ -18,6 +18,17 @@ export default function Review() {
 
         setIsSaving(true)
         try {
+            // Validate birth details format
+            const dateRegex = /^\d{4}-\d{2}-\d{2}$/
+            const timeRegex = /^\d{2}:\d{2}$/
+
+            if (onboardingData.birthDate && !dateRegex.test(onboardingData.birthDate)) {
+                throw new Error("Invalid birth date format. Please go back and correct it.")
+            }
+            if (onboardingData.birthTime && !timeRegex.test(onboardingData.birthTime)) {
+                throw new Error("Invalid birth time format. Please go back and correct it.")
+            }
+
             // 1. Upload images if any
             let uploadedImageUrls: string[] = []
             if (onboardingData.images && onboardingData.images.length > 0) {
@@ -52,7 +63,7 @@ export default function Review() {
             router.replace("/(tabs)")
         } catch (error: any) {
             console.error("Failed to save profile:", error)
-            Alert.alert("Error", "Failed to save your profile. Please try again.")
+            Alert.alert("Error", error.message || "Failed to save your profile. Please try again.")
         } finally {
             setIsSaving(false)
         }

@@ -43,6 +43,7 @@ const config: ExpoConfig = {
         },
       },
     ],
+    '@react-native-community/datetimepicker',
   ],
 
   experiments: {

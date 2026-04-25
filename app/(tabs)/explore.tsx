@@ -13,6 +13,7 @@ import { chatService } from "@/src/services/chat.service";
 import React, { useState, useEffect } from "react";
 import { StatusBar, Text, View, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { router } from "expo-router";
 
 const mapToProfile = (p: UserProfile): Profile => {
   const birthDate = p.birth_date ? new Date(p.birth_date) : new Date();
@@ -106,7 +107,10 @@ export default function ExploreScreen() {
 
   const handleViewProfile = () => {
     if (!topProfile) return;
-    showToast(`Opening ${topProfile.name}'s profile`);
+    router.push({
+      pathname: "/(tabs)/profile/[id]",
+      params: { id: topProfile.id }
+    } as any);
   };
 
   const openMessageModal = () => {

@@ -90,7 +90,10 @@ export default function ChatListScreen() {
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <TouchableOpacity
-              onPress={() => router.push(`/(tabs)/chat/${item.otherUser.id}`)}
+              onPress={() => router.push({
+                pathname: "/(tabs)/chat/[id]",
+                params: { id: item.otherUser.id }
+              } as any)}
               style={{
                 flexDirection: "row",
                 alignItems: "center",
