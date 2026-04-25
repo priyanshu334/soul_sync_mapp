@@ -23,13 +23,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   useEffect(() => {
+    console.log('🔵 AuthProvider: Starting session check')
     supabase.auth.getSession().then(({ data }) => {
+      console.log('🟢 AuthProvider: Session retrieved', data.session ? 'logged in' : 'not logged in')
       setSession(data.session)
+      setLoading(false)
+    }).catch((err) => {
+      console.error('🔴 AuthProvider: Session error', err)
       setLoading(false)
     })
 
     const { data: listener } = supabase.auth.onAuthStateChange(
       (_, session) => {
+        console.log('🟡 AuthProvider: Auth state changed')
         setSession(session)
       }
     )
